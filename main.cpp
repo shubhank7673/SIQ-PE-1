@@ -32,6 +32,7 @@ class Parkinglot{
         this->slots.push_back(newSlot);
         nearest_free_slot.push(i+1);
       }
+      cout<<"Created parking of "<<n<<" slots\n";
     }
     bool isFree()
     {
@@ -45,7 +46,7 @@ class Parkinglot{
     {
       if(isFree() == 0)
       {
-        cout<<"Parking lot is full";
+        cout<<"Parking lot is full\n";
         return;
       }
       int nearest_slot = nearest_free_slot.top();
@@ -56,7 +57,7 @@ class Parkinglot{
       age_to_car_numbers[age].insert(car_number);
       car_number_to_slot[car_number] = nearest_slot+1;
       age_to_slots[age].insert(nearest_slot+1);
-      cout<<"Car with vehicle registration number "+car_number+"has been parked at slot number "+to_string(nearest_slot+1)<<"\n";
+      cout<<"Car with vehicle registration number \""+car_number+"\" has been parked at slot number "+to_string(nearest_slot+1)<<"\n";
     }
     void leave(int slot)
     {
@@ -69,13 +70,13 @@ class Parkinglot{
       age_to_car_numbers[age].erase(car_number);
       car_number_to_slot.erase(car_number);
       age_to_slots[age].erase(slot);
-      cout<<"Slot number "+to_string(slot)+" vacated, the car with vehicle registration number "+car_number+" left the space, the driver of the car was of age "+to_string(age)<<"\n";
+      cout<<"Slot number "+to_string(slot)+" vacated, the car with vehicle registration number \""+car_number+"\" left the space, the driver of the car was of age "+to_string(age)<<"\n";
     }
     void get_car_numbers_by_age(int age)
     {
       if(age_to_car_numbers[age].size() == 0)
       {
-        cout<<"No data for given age\n";
+        cout<<"\n";
         return;
       }
       string all_numbers="";
@@ -90,7 +91,7 @@ class Parkinglot{
     {
       if(car_number_to_slot.find(car_number) == car_number_to_slot.end())
       {
-        cout<<"No data from given car number\n";
+        cout<<"\n";
         return;
       }
       cout<<car_number_to_slot[car_number]<<"\n";
@@ -99,7 +100,7 @@ class Parkinglot{
     {
       if(age_to_slots[age].size() == 0)
       {
-        cout<<"No data for given age\n";
+        cout<<"\n";
         return;
       }
       string all_slots="";
@@ -111,8 +112,57 @@ class Parkinglot{
       cout<<all_slots<<"\n";
     }
 };
+// function to split input string/query by space
+vector<string> split(string &s)
+{
+  vector<string>splitted;
+  string temp = "";
+  for(auto c:s)
+  {
+    if(c == ' ')
+    {
+      splitted.push_back(temp);
+      temp = "";
+    }
+    else
+    {
+      temp += c;
+    }
+  }
+  splitted.push_back(temp);
+  return splitted;
+}
 // Main driver code
 int main() {
-  int n = 6;
-  Parkinglot* parkingservice = new Parkinglot(6);
+  freopen("input.txt","r",stdin);
+  string query;
+  Parkinglot* parkingservice;
+  while(getline(cin,query))
+  {
+    vector<string> splitted = split(query);
+    if(splitted[0] == "Create_parking_lot")
+    {
+      parkingservice = new Parkinglot(stoi(splitted[1]));
+    }
+    else if(splitted[0] == "Park")
+    {
+      parkingservice->parkCar(splitted[1], stoi(splitted[3]));
+    }
+    else if(splitted[0] == "Leave")
+    {
+      parkingservice->leave(stoi(splitted[1]));
+    }
+    else if(splitted[0] == "Slot_number_for_car_with_number")
+    {
+      parkingservice->get_slot_by_car_number(splitted[1]);
+    }
+    else if(splitted[0] == "Slot_numbers_for_driver_of_age")
+    {
+      parkingservice->get_slots_by_age(stoi(splitted[1]));
+    }
+    else if(splitted[0] == "Vehicle_registration_number_for_driver_of_age")
+    {
+      parkingservice->get_car_numbers_by_age(stoi(splitted[1]));
+    }
+  }
 }
