@@ -18,12 +18,13 @@ class Slot{
     }
 };
 class Parkinglot{
-  public:
+  private:
     vector<Slot*>slots;
     unordered_map<int,unordered_set<string>>age_to_car_numbers;
     unordered_map<string,int>car_number_to_slot;
     unordered_map<int,unordered_set<int>>age_to_slots;
     priority_queue<int,vector<int>,greater<int>>nearest_free_slot;
+  public:
     Parkinglot(int n)
     {
       for(int i = 0;i<n;i++)
